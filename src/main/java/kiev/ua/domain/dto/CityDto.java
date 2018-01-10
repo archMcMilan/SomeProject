@@ -1,6 +1,6 @@
-package kiev.ua.model.dto;
+package kiev.ua.domain.dto;
 
-import kiev.ua.model.YearToPeople;
+import kiev.ua.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +12,4 @@ import java.util.List;
 @Data
 public class CityDto {
     private String name;
-    private List<YearToPeople> yearToPeople;
 }

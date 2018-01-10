@@ -1,4 +1,4 @@
-package kiev.ua.model.dto;
+package kiev.ua.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
