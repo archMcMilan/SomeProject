@@ -10,10 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/city")
@@ -37,9 +42,17 @@ public class CityController {
     }
 
 
-    @PostMapping
-    public String getAverage(@RequestBody Population population) {
-        System.out.println(population.getYear());
-        return "Hi";
+    @GetMapping("/average")
+    public List<CityDto> getAverageByCity(@RequestParam String cityName) {
+        List<CityDto> result = new LinkedList<>();
+        Map<City, BigDecimal> cityAveragePopulation = storeService.getCityAveragePopulation(cityName);
+        System.out.println(cityAveragePopulation);
+        for (Map.Entry<City, BigDecimal> entry : cityAveragePopulation.entrySet()) {
+            result.add(CityDto.builder()
+                           .name(entry.getKey().getName())
+                           .averagePopulation(entry.getValue())
+                           .build());
+        }
+        return result;
     }
 }

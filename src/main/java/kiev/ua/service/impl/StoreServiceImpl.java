@@ -40,16 +40,18 @@ public class StoreServiceImpl implements StoreService {
     public Map<City, BigDecimal> getCityAveragePopulation(String cityName) {
         Map<City, BigDecimal> averagePopulationPerCity = new HashMap<>();
         List<City> cities = cityRepository.findAllByName(cityName);
+        System.out.println(cities);
         for (City city: cities) {
             List<Population> populationsByCity = populationRepository.findAllByCity(city);
-            BigDecimal averagePeopleAmount = BigDecimal.valueOf(populationsByCity.stream()
+            if (populationsByCity.size() > 0) {
+                BigDecimal averagePeopleAmount = BigDecimal.valueOf(populationsByCity.stream()
                                                                 .map(Population::getPeopleAmount)
                                                                 .reduce(Long::sum)
                                                                 .get()
                                                                 .doubleValue() / populationsByCity.size()).setScale(2);
-            averagePopulationPerCity.put(city, averagePeopleAmount);
+                averagePopulationPerCity.put(city, averagePeopleAmount);
+            }
         }
-
         return averagePopulationPerCity;
     }
 }
