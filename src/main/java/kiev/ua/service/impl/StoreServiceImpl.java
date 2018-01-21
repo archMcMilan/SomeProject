@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.transaction.Transactional;
 
 @Service
@@ -30,25 +31,36 @@ public class StoreServiceImpl implements StoreService {
             .name(name)
             .build();
         cityRepository.save(city);
-        Population
-            population = populationRepository.save(new Population(LocalDateTime.now().getYear(), peopleAmount, city));
-        System.out.println(population);
+        populationRepository.save(new Population(LocalDateTime.now().getYear(), peopleAmount, city));
+        return city;
+    }
+
+    @Override
+    @Transactional
+    public City addCity(String name, long peopleAmount, int year) {
+        City city = City.builder()
+            .name(name)
+            .build();
+        cityRepository.save(city);
+        populationRepository.save(new Population(year, peopleAmount, city));
         return city;
     }
 
     @Override
     public Map<City, BigDecimal> getCityAveragePopulation(String cityName) {
         Map<City, BigDecimal> averagePopulationPerCity = new HashMap<>();
-        List<City> cities = cityRepository.findAllByName(cityName);
-        System.out.println(cities);
+        List<City> cities = cityRepository.findAllByNameIgnoreCaseContaining(cityName);
         for (City city: cities) {
             List<Population> populationsByCity = populationRepository.findAllByCity(city);
-            if (populationsByCity.size() > 0) {
-                BigDecimal averagePeopleAmount = BigDecimal.valueOf(populationsByCity.stream()
-                                                                .map(Population::getPeopleAmount)
-                                                                .reduce(Long::sum)
-                                                                .get()
-                                                                .doubleValue() / populationsByCity.size()).setScale(2);
+            Optional<Long> cityPopulationSum = populationsByCity.stream()
+                .map(Population::getPeopleAmount)
+                .reduce(Long::sum);
+            if (cityPopulationSum.isPresent()) {
+                BigDecimal averagePeopleAmount =
+                    BigDecimal.valueOf(cityPopulationSum.map(o -> o.doubleValue() / populationsByCity.size())
+                                           .get()
+                                           .doubleValue() / populationsByCity.size()).setScale(2);
+
                 averagePopulationPerCity.put(city, averagePeopleAmount);
             }
         }

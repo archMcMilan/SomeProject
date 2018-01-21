@@ -42,7 +42,7 @@ public class StoreServiceImplTest {
         Population population2017 = new Population(2017, 2400, city);
         Population population2016 = new Population(2016, 2500, city);
         List<Population> populationList = Arrays.asList(population2018, population2017, population2016);
-        when(cityRepository.findAllByName(cityName)).thenReturn(Arrays.asList(city));
+        when(cityRepository.findAllByNameIgnoreCaseContaining(cityName)).thenReturn(Arrays.asList(city));
         when(populationRepository.findAllByCity(any(City.class))).thenReturn(populationList);
 
         assertEquals(BigDecimal.valueOf(230000, 2), storeService.getCityAveragePopulation(cityName).get(city));
@@ -50,7 +50,7 @@ public class StoreServiceImplTest {
 
     @Test
     public void getCityAveragePopulationWhenNoCityWithSuchName() {
-        when(cityRepository.findAllByName("First")).thenReturn(Collections.emptyList());
+        when(cityRepository.findAllByNameIgnoreCaseContaining("First")).thenReturn(Collections.emptyList());
         assertEquals(0, storeService.getCityAveragePopulation("First").size());
     }
 

@@ -10,5 +10,7 @@ public interface StoreService {
 
     City addCity(String name, long peopleAmount);
 
+    City addCity(String name, long peopleAmount, int year);
+
     Map<City, BigDecimal> getCityAveragePopulation(String cityName);
 }

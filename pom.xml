@@ -17,6 +17,24 @@
         </plugins>
     </build>
 
+    <!--<settings>-->
+        <!--<profiles>-->
+            <!--<profile>-->
+                <!--<id>sonar</id>-->
+                <!--<activation>-->
+                    <!--<activeByDefault>true</activeByDefault>-->
+                <!--</activation>-->
+                <!--<properties>-->
+                    <!--&lt;!&ndash; Optional URL to server. Default value is http://localhost:9000 &ndash;&gt;-->
+                    <!--<sonar.host.url>-->
+                        <!--http://myserver:9000-->
+                    <!--</sonar.host.url>-->
+                <!--</properties>-->
+            <!--</profile>-->
+        <!--</profiles>-->
+    <!--</settings>-->
+
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
